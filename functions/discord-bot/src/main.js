@@ -3,6 +3,7 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
+import OpenAI from 'openai';
 import { throwIfMissing } from './utils.js';
 
 export default async ({ req, res, error, log }) => {
@@ -60,18 +61,23 @@ export default async ({ req, res, error, log }) => {
       );
 
     case 'start':
-      const personal = data.options[0]?.value || 'Starting 👋';
+      const alias = data.member.nick || data.member.user.username;
 
-      const readableLocation = 'Los Angeles, CA :flag_us:';
+      const personal = data.options ? data.options[0]?.value : 'Starting 👋';
 
-      const readableTime = new Date().toLocaleTimeString('en-US', {
+      const location = 'Cambridge, UK :flag_gb:';
+
+      const time = new Date().toLocaleTimeString('en-US', {
         hour: 'numeric',
         minute: 'numeric',
         hour12: true,
-        timeZone: 'America/Los_Angeles',
+        timeZone: 'Europe/London',
       });
 
-      const content = `${personal}\n at ${readableTime} from ${readableLocation}.`;
+      const content = [
+        `**${alias}**: ${personal}`,
+        `:clock1: ${time} from ${location}`,
+      ].join('\n');
 
       return res.json(
         {
@@ -84,15 +90,54 @@ export default async ({ req, res, error, log }) => {
       );
 
     case 'daily':
-      const dailyMessage = data.options[0]?.value || 'Daily update';
+      const currentDayOfWeekAndDay = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+        day: 'numeric',
+      });
 
-      const dailyContent = `${dailyMessage}\n\n- [ ] Yesterday's progress\n- [ ] Today's plan\n- [ ] Blockers`;
+      const systemPrompt = `Here is a format for daily updates:
+🚦 Daily Update - ${currentDayOfWeekAndDay}
+
+🟢 My Progress
+- List progress made on tasks
+- \`projectName\` - Progress made
+
+🟡 My Plans
+- List short term plans
+
+🔴 My Blockers
+- List of blockers
+None
+
+Structure any given daily updates using this format.
+- Avoid rephrasing if possible.
+- Correct obvious grammatical and spelling errors.
+- If no blockers are mentioned, do not include the section.
+- If no plans are mentioned, do not include the section.
+- Do not exagerate or change the meaning of progress points.
+- Output the result only.`;
+
+      const openai = new OpenAI();
+
+      const completion = await openai.chat.completions.create({
+        model: 'gpt-4o',
+        messages: [
+          {
+            role: 'system',
+            content: systemPrompt,
+          },
+          {
+            role: 'user',
+            content: `Here is a daily update: ${data.options[0].value}`,
+          },
+        ],
+      });
 
       return res.json(
         {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
-            content: dailyContent,
+            content: completion.choices[0].message.content,
           },
         },
         200
