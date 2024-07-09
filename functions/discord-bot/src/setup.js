@@ -17,7 +17,6 @@ async function setup() {
     description: 'Hello command',
   });
 
-  /*
   await discord.registerCommand({
     name: 'schedule',
     type: CommandType.SLASH_COMMAND,
@@ -37,6 +36,7 @@ async function setup() {
       },
     ],
   });
+  /*
 
   await discord.registerCommand({
     name: 'start',
