@@ -1,4 +1,4 @@
-import { throwIfMissing } from './utils';
+import { throwIfMissing } from './utils.js';
 
 export class Discord {
   constructor() {
