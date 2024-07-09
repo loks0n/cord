@@ -4,8 +4,8 @@ export class Discord {
   constructor() {
     throwIfMissing(process.env, ['DISCORD_APPLICATION_ID', 'DISCORD_TOKEN']);
 
-    this.fetch = (endpoint, options) =>
-      fetch(`https://discord.com/api/v9${endpoint}`, {
+    this.fetch = async (endpoint, options) => {
+      const response = await fetch(`https://discord.com/api/v9${endpoint}`, {
         ...options,
         method: options.body ? 'POST' : 'GET',
         headers: {
@@ -14,18 +14,27 @@ export class Discord {
         },
         body: options.body ? JSON.stringify(options.body) : undefined,
       });
+
+      if (!response.ok) {
+        try {
+          const data = await response.json();
+          throw new Error(
+            `Discord API error:\n${JSON.stringify(data, null, 2)}`
+          );
+        } catch (e) {
+          const text = await response.text();
+          throw new Error(`Discord API error:\n${text}`);
+        }
+      }
+    };
   }
 
   async registerCommand(command) {
-    const response = await this.fetch(
+    await this.fetch(
       `/applications/${process.env.DISCORD_APPLICATION_ID}/commands`,
       {
         body: command,
       }
     );
-
-    if (!response.ok) {
-      throw new Error(`Failed to register command: ${response.statusText}`);
-    }
   }
 }
