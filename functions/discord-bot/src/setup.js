@@ -40,14 +40,16 @@ async function setup() {
   console.log('Registered schedule command');
 
   await discord.registerCommand({
-    name: 'morning',
+    name: 'start',
     type: CommandType.SLASH_COMMAND,
     description: 'Start your day command',
-    options: {
-      type: CommandOptionType.STRING,
-      name: 'message',
-      description: 'The personal message to send',
-    },
+    options: [
+      {
+        type: CommandOptionType.STRING,
+        name: 'message',
+        description: 'The personal message to send',
+      },
+    ],
   });
   console.log('Registered start command');
 
@@ -55,12 +57,14 @@ async function setup() {
     name: 'daily',
     type: CommandType.SLASH_COMMAND,
     description: 'Auto format your daily update',
-    options: {
-      type: CommandOptionType.STRING,
-      name: 'message',
-      description: 'The daily update message',
-      required: true,
-    },
+    options: [
+      {
+        type: CommandOptionType.STRING,
+        name: 'message',
+        description: 'The daily update message',
+        required: true,
+      },
+    ],
   });
   console.log('Registered daily command');
 }
