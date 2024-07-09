@@ -3,10 +3,10 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
-import { throwIfMissing } from './utils.js';
 import { generateDailyUpdate } from './openai.js';
 import { Discord } from './discord.js';
 import { Appwrite } from './appwrite.js';
+import { ExecutionMethod } from 'node-appwrite';
 
 export default async ({ req, res }) => {
   const discord = new Discord();
@@ -98,7 +98,11 @@ export default async ({ req, res }) => {
           update: data.options[0].value,
         }),
         true,
-        '/daily'
+        '/daily',
+        ExecutionMethod.GET,
+        {
+          'Content-Type': 'application/json',
+        }
       );
 
       return res.json(
