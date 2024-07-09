@@ -8,11 +8,18 @@ import { Discord } from './discord.js';
 import { Appwrite } from './appwrite.js';
 import { ExecutionMethod } from 'node-appwrite';
 
-export default async ({ req, res }) => {
+export default async ({ req, res, log }) => {
   const discord = new Discord();
 
   if (req.path === '/daily') {
     const dailyUpdate = await generateDailyUpdate(req.body.update);
+
+    log('Generated daily update:', dailyUpdate);
+    log(
+      'Sending response to Discord:',
+      `/webhooks/${process.env.DISCORD_APPLICATION_ID}/${req.body.token}/messages/@original`
+    );
+
     await discord.editOriginalInteractionResponse(req.body.token, {
       content: dailyUpdate,
     });
