@@ -99,7 +99,7 @@ export default async ({ req, res }) => {
         }),
         true,
         '/daily',
-        ExecutionMethod.GET,
+        ExecutionMethod.POST,
         {
           'Content-Type': 'application/json',
         }
