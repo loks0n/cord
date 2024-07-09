@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "discord-interactions": "^3.4.0",
+    "node-appwrite": "^14.0.0-rc.1",
     "openai": "^4.52.4",
     "undici": "^6.18.1"
   },
