@@ -40,7 +40,7 @@ async function setup() {
   console.log('Registered schedule command');
 
   await discord.registerCommand({
-    name: 'start',
+    name: 'morning',
     type: CommandType.SLASH_COMMAND,
     description: 'Start your day command',
     options: {
