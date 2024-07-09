@@ -4,7 +4,7 @@ import { throwIfMissing } from './utils.js';
 export class Appwrite {
   constructor(apiKey) {
     throwIfMissing(process.env, [
-      'APPWRITE_APPWRITE_FUNCTION_API_ENDPOINT',
+      'APPWRITE_FUNCTION_API_ENDPOINT',
       'APPWRITE_FUNCTION_PROJECT_ID',
     ]);
 
