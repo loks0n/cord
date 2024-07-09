@@ -42,7 +42,7 @@ async function setup() {
     type: CommandType.SLASH_COMMAND,
     description: 'Start your day command',
     options: {
-      type: 3,
+      type: CommandOptionType.STRING,
       name: 'message',
       description: 'The personal message to send',
     },
@@ -56,6 +56,7 @@ async function setup() {
       type: CommandOptionType.STRING,
       name: 'message',
       description: 'The daily update message',
+      required: true,
     },
   });
 }
