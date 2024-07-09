@@ -10,14 +10,16 @@ export class Discord {
     ]);
 
     this.fetch = async (endpoint, options) => {
+      const { body, method, headers, ...fetchOptions } = options;
+
       const response = await fetch(`https://discord.com/api/v9${endpoint}`, {
-        ...options,
-        method: options.body ? 'POST' : 'GET',
+        method: method || 'POST',
         headers: {
           Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
-          'Content-Type': options.body ? 'application/json' : undefined,
+          'Content-Type': headers?.['Content-Type'] || 'application/json',
         },
-        body: options.body ? JSON.stringify(options.body) : undefined,
+        body: body ? JSON.stringify(body) : undefined,
+        ...fetchOptions,
       });
 
       if (!response.ok) {

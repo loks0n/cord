@@ -103,10 +103,7 @@ export default async ({ req, res }) => {
 
       return res.json(
         {
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: 'thinking...',
-          },
+          type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
         },
         200
       );
