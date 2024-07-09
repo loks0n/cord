@@ -27,7 +27,7 @@ export class Discord {
             throw new Error(`Discord API error:\n${text}`);
           } catch (e) {
             throw new Error(
-              `Discord API error:\n$${response.status} - ${response.statusText}`
+              `Discord API error:\n${response.status} - ${response.statusText}`
             );
           }
         }
