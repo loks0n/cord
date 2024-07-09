@@ -16,21 +16,9 @@ export class Discord {
       });
 
       if (!response.ok) {
-        try {
-          const data = await response.json();
-          throw new Error(
-            `Discord API error:\n${JSON.stringify(data, null, 2)}`
-          );
-        } catch (e) {
-          try {
-            const text = await response.text();
-            throw new Error(`Discord API error:\n${text}`);
-          } catch (e) {
-            throw new Error(
-              `Discord API error:\n${response.status} - ${response.statusText}`
-            );
-          }
-        }
+        throw new Error(
+          `Discord API error:\n${response.status} - ${response.statusText}`
+        );
       }
     };
   }

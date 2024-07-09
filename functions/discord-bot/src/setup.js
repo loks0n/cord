@@ -16,6 +16,7 @@ async function setup() {
     type: CommandType.SLASH_COMMAND,
     description: 'Hello command',
   });
+  console.log('Registered hello command');
 
   await discord.registerCommand({
     name: 'schedule',
@@ -36,7 +37,7 @@ async function setup() {
       },
     ],
   });
-  /*
+  console.log('Registered schedule command');
 
   await discord.registerCommand({
     name: 'start',
@@ -48,6 +49,7 @@ async function setup() {
       description: 'The personal message to send',
     },
   });
+  console.log('Registered start command');
 
   await discord.registerCommand({
     name: 'daily',
@@ -60,7 +62,7 @@ async function setup() {
       required: true,
     },
   });
-  */
+  console.log('Registered daily command');
 }
 
 setup();
