@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "discord-interactions": "^3.4.0",
+    "openai": "^4.52.4",
     "undici": "^6.18.1"
   },
   "devDependencies": {
