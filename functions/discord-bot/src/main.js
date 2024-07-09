@@ -3,25 +3,25 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
-import OpenAI from 'openai';
 import { throwIfMissing } from './utils.js';
+import { generateDailyUpdate } from './openai.js';
+import { Discord } from './discord.js';
+import { Appwrite } from './appwrite.js';
 
-export default async ({ req, res, error, log }) => {
-  throwIfMissing(process.env, ['DISCORD_PUBLIC_KEY']);
+export default async ({ req, res }) => {
+  const discord = new Discord();
 
-  if (
-    !verifyKey(
-      req.bodyRaw,
-      req.headers['x-signature-ed25519'],
-      req.headers['x-signature-timestamp'],
-      process.env.DISCORD_PUBLIC_KEY
-    )
-  ) {
-    error('Invalid request.');
-    return res.json({ error: 'Invalid request signature' }, 401);
+  if (req.path === '/daily') {
+    const dailyUpdate = await generateDailyUpdate(req.body.update);
+    await discord.editOriginalInteractionResponse(req.body.token, {
+      content: dailyUpdate,
+    });
+    return res.json({ success: true }, 200);
   }
 
-  log('Received valid webhook request.');
+  if (!discord.verifyRequest(req)) {
+    return res.json({ error: 'Invalid request signature' }, 401);
+  }
 
   const { type, data } = req.body;
 
@@ -45,7 +45,6 @@ export default async ({ req, res, error, log }) => {
         200
       );
     case 'schedule':
-      const message = data.options[0].value;
       const delay = data.options[1].value;
 
       await new Promise((resolve) => setTimeout(resolve, delay));
@@ -90,54 +89,23 @@ export default async ({ req, res, error, log }) => {
       );
 
     case 'daily':
-      const currentDayOfWeekAndDay = new Date().toLocaleDateString('en-US', {
-        weekday: 'short',
-        day: 'numeric',
-      });
+      const { functions } = new Appwrite(req.headers['x-appwrite-key']);
 
-      const systemPrompt = `Here is a format for daily updates:
-🚦 Daily Update - ${currentDayOfWeekAndDay}
-
-🟢 My Progress
-- List progress made on tasks
-- \`projectName\` - Progress made
-
-🟡 My Plans
-- List short term plans
-
-🔴 My Blockers
-- List of blockers
-None
-
-Structure any given daily updates using this format.
-- Avoid rephrasing if possible.
-- Correct obvious grammatical and spelling errors.
-- If no blockers are mentioned, do not include the section.
-- If no plans are mentioned, do not include the section.
-- Do not exagerate or change the meaning of progress points.
-- Output the result only.`;
-
-      const openai = new OpenAI();
-
-      const completion = await openai.chat.completions.create({
-        model: 'gpt-4o',
-        messages: [
-          {
-            role: 'system',
-            content: systemPrompt,
-          },
-          {
-            role: 'user',
-            content: `Here is a daily update: ${data.options[0].value}`,
-          },
-        ],
-      });
+      await functions.createExecution(
+        process.env.APPWRITE_FUNCTION_ID,
+        JSON.stringify({
+          token: data.token,
+          update: data.options[0].value,
+        }),
+        true,
+        '/daily'
+      );
 
       return res.json(
         {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
-            content: completion.choices[0].message.content,
+            content: 'thinking...',
           },
         },
         200
