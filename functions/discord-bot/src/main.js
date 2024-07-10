@@ -10,14 +10,6 @@ export default async ({ req, res, log }) => {
   if (req.path === '/daily') {
     const dailyUpdate = await generateDailyUpdate(req.body.update);
 
-    log(JSON.stringify(req));
-
-    log('Generated daily update:' + dailyUpdate);
-    log(
-      'Sending response to Discord:' +
-        `/webhooks/${process.env.DISCORD_APPLICATION_ID}/${req.body.token}/messages/@original`
-    );
-
     await discord.editOriginalInteractionResponse(req.body.token, {
       content: dailyUpdate,
     });
@@ -28,7 +20,7 @@ export default async ({ req, res, log }) => {
     return res.json({ error: 'Invalid request signature' }, 401);
   }
 
-  const { type, data } = req.body;
+  const { type, data, token } = req.body;
 
   if (type === InteractionType.PING) {
     return res.json({ type: InteractionResponseType.PONG }, 200);
@@ -99,7 +91,7 @@ export default async ({ req, res, log }) => {
       await functions.createExecution(
         process.env.APPWRITE_FUNCTION_ID,
         JSON.stringify({
-          token: data.token,
+          token,
           update: data.options[0].value,
         }),
         true,
