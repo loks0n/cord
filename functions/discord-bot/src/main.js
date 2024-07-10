@@ -9,7 +9,7 @@ export default async ({ req, res }) => {
     const discord = new Discord();
     await discord.editOriginalInteractionResponse(req.body.token, {
       'allowed-mentions': { parse: ['users'], replied_user: false },
-      content: await generateDailyUpdate(req.body.username, req.body.update),
+      content: await generateDailyUpdate(req.body.userId, req.body.update),
     });
     return res.json({ success: true }, 200);
   }
@@ -67,7 +67,7 @@ export default async ({ req, res }) => {
       });
 
       const content = [
-        `@${member.user.username} ${personal}`,
+        `<@${member.user.id}> ${personal}`,
         `:clock1: ${time} from ${location}`,
       ].join('\n');
 
@@ -90,7 +90,7 @@ export default async ({ req, res }) => {
       await functions.createExecution(
         process.env.APPWRITE_FUNCTION_ID,
         JSON.stringify({
-          username: member.user.username,
+          userId: member.user.id,
           token,
           update: data.options[0].value,
         }),
