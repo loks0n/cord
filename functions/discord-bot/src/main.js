@@ -11,10 +11,7 @@ export default async ({ req, res }) => {
     const dailyUpdate = await generateDailyUpdate(req.body.update);
 
     await discord.editOriginalInteractionResponse(req.body.token, {
-      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-      data: {
-        content: dailyUpdate,
-      },
+      content: dailyUpdate,
     });
 
     return res.json({ success: true }, 200);

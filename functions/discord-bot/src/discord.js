@@ -59,11 +59,11 @@ export class Discord {
     );
   }
 
-  async editOriginalInteractionResponse(token, response) {
+  async editOriginalInteractionResponse(token, data) {
     await this.fetch(
       `/webhooks/${process.env.DISCORD_APPLICATION_ID}/${token}/messages/@original`,
       {
-        body: response,
+        body: data,
         method: 'PATCH',
       }
     );
