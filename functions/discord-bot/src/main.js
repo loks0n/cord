@@ -10,10 +10,10 @@ export default async ({ req, res, log }) => {
   if (req.path === '/daily') {
     const dailyUpdate = await generateDailyUpdate(req.body.update);
 
-    log('Generated daily update:', dailyUpdate);
+    log('Generated daily update:' + dailyUpdate);
     log(
-      'Sending response to Discord:',
-      `/webhooks/${process.env.DISCORD_APPLICATION_ID}/${req.body.token}/messages/@original`
+      'Sending response to Discord:' +
+        `/webhooks/${process.env.DISCORD_APPLICATION_ID}/${req.body.token}/messages/@original`
     );
 
     await discord.editOriginalInteractionResponse(req.body.token, {
