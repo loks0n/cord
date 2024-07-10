@@ -5,17 +5,16 @@ import { Appwrite } from './appwrite.js';
 import { ExecutionMethod } from 'node-appwrite';
 
 export default async ({ req, res }) => {
-  const discord = new Discord();
-
   if (req.path === '/daily') {
+    const discord = new Discord();
     await discord.editOriginalInteractionResponse(req.body.token, {
       'allowed-mentions': { parse: ['users'], replied_user: false },
       content: await generateDailyUpdate(req.body.username, req.body.update),
     });
-
     return res.json({ success: true }, 200);
   }
 
+  const discord = new Discord();
   if (!discord.verifyRequest(req)) {
     return res.json({ error: 'Invalid request signature' }, 401);
   }
@@ -57,7 +56,7 @@ export default async ({ req, res }) => {
       );
 
     case 'start':
-      const alias = data.member.nick || data.member.user.username;
+      const username = data.member.nick || data.member.user.username;
 
       const personal = data.options ? data.options[0]?.value : 'Starting 👋';
 
@@ -71,7 +70,7 @@ export default async ({ req, res }) => {
       });
 
       const content = [
-        `**${alias}**: ${personal}`,
+        `**${username}**: ${personal}`,
         `:clock1: ${time} from ${location}`,
       ].join('\n');
 
