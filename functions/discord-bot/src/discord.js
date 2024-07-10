@@ -16,7 +16,8 @@ export class Discord {
         method: method || 'POST',
         headers: {
           Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
-          'Content-Type': headers?.['Content-Type'] || 'application/json',
+          'Content-Type': body ? 'application/json' : undefined,
+          ...headers,
         },
         body: body ? JSON.stringify(body) : undefined,
         ...fetchOptions,
