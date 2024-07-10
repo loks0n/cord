@@ -56,10 +56,7 @@ export default async ({ req, res }) => {
       );
 
     case 'start':
-      const username = data.member.nick || data.member.user.username;
-
       const personal = data.options ? data.options[0]?.value : 'Starting 👋';
-
       const location = 'Cambridge, UK :flag_gb:';
 
       const time = new Date().toLocaleTimeString('en-US', {
@@ -70,7 +67,7 @@ export default async ({ req, res }) => {
       });
 
       const content = [
-        `**${username}**: ${personal}`,
+        `**${data.member.user.username}**: ${personal}`,
         `:clock1: ${time} from ${location}`,
       ].join('\n');
 
@@ -90,7 +87,7 @@ export default async ({ req, res }) => {
       await functions.createExecution(
         process.env.APPWRITE_FUNCTION_ID,
         JSON.stringify({
-          username: data.member.nick || data.member.user.username,
+          username: data.member.user.username,
           token,
           update: data.options[0].value,
         }),
