@@ -58,9 +58,13 @@ export class Discord {
     );
   }
 
-  async createInteractionResponse(interactionId, token, response) {
-    await this.fetch(`/interactions/${interactionId}/${token}/callback`, {
-      body: response,
-    });
+  async editOriginalInteractionResponse(token, response) {
+    await this.fetch(
+      `/webhooks/${process.env.DISCORD_APPLICATION_ID}/${token}/messages/@original`,
+      {
+        body: response,
+        method: 'PATCH',
+      }
+    );
   }
 }

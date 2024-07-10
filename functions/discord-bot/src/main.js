@@ -10,7 +10,7 @@ export default async ({ req, res }) => {
   if (req.path === '/daily') {
     const dailyUpdate = await generateDailyUpdate(req.body.update);
 
-    await discord.createInteractionResponse(req.body.id, req.body.token, {
+    await discord.editOriginalInteractionResponse(req.body.token, {
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
         content: dailyUpdate,
@@ -24,7 +24,7 @@ export default async ({ req, res }) => {
     return res.json({ error: 'Invalid request signature' }, 401);
   }
 
-  const { id, type, data, token } = req.body;
+  const { type, data, token } = req.body;
 
   if (type === InteractionType.PING) {
     return res.json({ type: InteractionResponseType.PONG }, 200);
@@ -95,7 +95,6 @@ export default async ({ req, res }) => {
       await functions.createExecution(
         process.env.APPWRITE_FUNCTION_ID,
         JSON.stringify({
-          id,
           token,
           update: data.options[0].value,
         }),
