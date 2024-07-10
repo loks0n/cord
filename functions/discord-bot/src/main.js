@@ -2,11 +2,12 @@ import { InteractionResponseType, InteractionType } from 'discord-interactions';
 import { generateDailyUpdate } from './openai.js';
 import { Discord } from './discord.js';
 import { Appwrite } from './appwrite.js';
-import { ExecutionMethod } from 'node-appwrite';
+import { commands } from './commands/index.js';
 
 export default async ({ req, res }) => {
+  const discord = new Discord();
+
   if (req.path === '/daily') {
-    const discord = new Discord();
     await discord.editOriginalInteractionResponse(req.body.token, {
       'allowed-mentions': { parse: ['users'], replied_user: false },
       content: await generateDailyUpdate(req.body.userId, req.body.update),
@@ -14,12 +15,17 @@ export default async ({ req, res }) => {
     return res.json({ success: true }, 200);
   }
 
-  const discord = new Discord();
+  if (req.path === '/schedule') {
+    await discord.editOriginalInteractionResponse(req.body.token, {
+      'allowed-mentions': { parse: ['users'], replied_user: true },
+      content: `Scheduled message from <@${req.body.userId}>: ${req.body.message}`,
+    });
+    return res.json({ success: true }, 200);
+  }
+
   if (!discord.verifyRequest(req)) {
     return res.json({ error: 'Invalid request signature' }, 401);
   }
-
-  const { type, data, token, member } = req.body;
 
   if (type === InteractionType.PING) {
     return res.json({ type: InteractionResponseType.PONG }, 200);
@@ -29,87 +35,13 @@ export default async ({ req, res }) => {
     return res.json({ error: 'Invalid interaction type' }, 400);
   }
 
-  switch (data.name) {
-    case 'hello':
-      return res.json(
-        {
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: 'Hello, World!',
-          },
-        },
-        200
-      );
-    case 'schedule':
-      const delay = data.options[1].value;
+  const command = commands.find(
+    (command) => command.name === req.body.data.name
+  );
 
-      await new Promise((resolve) => setTimeout(resolve, delay));
-
-      return res.json(
-        {
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: `Scheduled message: ${data.options[0].value}`,
-          },
-        },
-        200
-      );
-
-    case 'start':
-      const personal = data.options ? data.options[0]?.value : 'Starting 👋';
-      const location = 'Cambridge, UK :flag_gb:';
-
-      const time = new Date().toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true,
-        timeZone: 'Europe/London',
-      });
-
-      const content = [
-        `<@${member.user.id}> ${personal}`,
-        `:clock1: ${time} from ${location}`,
-      ].join('\n');
-
-      return res.json(
-        {
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content,
-          },
-          allowed_mentions: {
-            parse: ['users'],
-          },
-        },
-        200
-      );
-
-    case 'daily':
-      const { functions } = new Appwrite(req.headers['x-appwrite-key']);
-
-      await functions.createExecution(
-        process.env.APPWRITE_FUNCTION_ID,
-        JSON.stringify({
-          userId: member.user.id,
-          token,
-          update: data.options[0].value,
-        }),
-        true,
-        '/daily',
-        ExecutionMethod.POST,
-        {
-          'Content-Type': 'application/json',
-        }
-      );
-
-      return res.json(
-        {
-          type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
-        },
-        200
-      );
-
-    default:
-      return res.json({ error: 'Unknown command' }, 400);
+  if (!command) {
+    return res.json({ error: 'Unknown command' }, 400);
   }
+
+  return res.json(command.action(req.body), 200);
 };
