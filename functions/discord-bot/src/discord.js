@@ -23,9 +23,13 @@ export class Discord {
       });
 
       if (!response.ok) {
-        throw new Error(
-          `Discord API error:\n${response.status} - ${response.statusText}`
-        );
+        let message;
+        try {
+          message = JSON.stringify(await response.json(), null, 2);
+        } catch (error) {
+          message = `${response.status} - ${response.statusText}`;
+        }
+        throw new Error(`Discord API error:\n${message}`);
       }
     };
   }
