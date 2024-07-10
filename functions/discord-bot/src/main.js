@@ -10,6 +10,8 @@ export default async ({ req, res, log }) => {
   if (req.path === '/daily') {
     const dailyUpdate = await generateDailyUpdate(req.body.update);
 
+    log(req.body);
+
     log('Generated daily update:' + dailyUpdate);
     log(
       'Sending response to Discord:' +
