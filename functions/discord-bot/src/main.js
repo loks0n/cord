@@ -8,10 +8,9 @@ export default async ({ req, res }) => {
   const discord = new Discord();
 
   if (req.path === '/daily') {
-    const dailyUpdate = await generateDailyUpdate(req.body.update);
-
     await discord.editOriginalInteractionResponse(req.body.token, {
-      content: dailyUpdate,
+      'allowed-mentions': { parse: ['users'], replied_user: false },
+      content: await generateDailyUpdate(req.body.username, req.body.update),
     });
 
     return res.json({ success: true }, 200);
@@ -92,6 +91,7 @@ export default async ({ req, res }) => {
       await functions.createExecution(
         process.env.APPWRITE_FUNCTION_ID,
         JSON.stringify({
+          username: data.member.nick || data.member.user.username,
           token,
           update: data.options[0].value,
         }),

@@ -1,21 +1,21 @@
 import OpenAI from 'openai';
 
-export async function generateDailyUpdate(update) {
-  const currentDayOfWeekAndDay = new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    day: 'numeric',
+export async function generateDailyUpdate(username, update) {
+  const currentDayOfWeek = new Date().toLocaleDateString('en-US', {
+    weekday: 'short',
   });
+
   const systemPrompt = `Here is a format for daily updates:
-    🚦 Daily Update - ${currentDayOfWeekAndDay}
+    🚦 @${username}'s daily update - ${currentDayOfWeek}
     
-    🟢 My Progress
+    🟢 My progress
     - List progress made on tasks
     - \`projectName\` - Progress made
     
-    🟡 My Plans
+    🟡 My plans
     - List short term plans
     
-    🔴 My Blockers
+    🔴 My blockers
     - List of blockers
     None
     
