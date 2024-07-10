@@ -19,7 +19,7 @@ export default async ({ req, res }) => {
     return res.json({ error: 'Invalid request signature' }, 401);
   }
 
-  const { type, data, token } = req.body;
+  const { type, data, token, member } = req.body;
 
   if (type === InteractionType.PING) {
     return res.json({ type: InteractionResponseType.PONG }, 200);
@@ -67,7 +67,7 @@ export default async ({ req, res }) => {
       });
 
       const content = [
-        `**${data.member.user.username}**: ${personal}`,
+        `@${member.user.username} ${personal}`,
         `:clock1: ${time} from ${location}`,
       ].join('\n');
 
@@ -76,6 +76,9 @@ export default async ({ req, res }) => {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             content,
+          },
+          allowed_mentions: {
+            parse: ['users'],
           },
         },
         200
@@ -87,7 +90,7 @@ export default async ({ req, res }) => {
       await functions.createExecution(
         process.env.APPWRITE_FUNCTION_ID,
         JSON.stringify({
-          username: data.member.user.username,
+          username: member.user.username,
           token,
           update: data.options[0].value,
         }),
