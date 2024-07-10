@@ -59,9 +59,8 @@ export class Discord {
   }
 
   async createInteractionResponse(interactionId, token, response) {
-    await this.fetch(
-      `/interactions/${interactionId}/${token}/callback`,
-      response
-    );
+    await this.fetch(`/interactions/${interactionId}/${token}/callback`, {
+      body: response,
+    });
   }
 }
