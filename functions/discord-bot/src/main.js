@@ -4,7 +4,7 @@ import { Discord } from './discord.js';
 import { Appwrite } from './appwrite.js';
 import { ExecutionMethod } from 'node-appwrite';
 
-export default async ({ req, res, log }) => {
+export default async ({ req, res }) => {
   const discord = new Discord();
 
   if (req.path === '/daily') {
@@ -16,6 +16,7 @@ export default async ({ req, res, log }) => {
         content: dailyUpdate,
       },
     });
+
     return res.json({ success: true }, 200);
   }
 
