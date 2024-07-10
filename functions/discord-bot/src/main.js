@@ -1,8 +1,4 @@
-import {
-  InteractionResponseType,
-  InteractionType,
-  verifyKey,
-} from 'discord-interactions';
+import { InteractionResponseType, InteractionType } from 'discord-interactions';
 import { generateDailyUpdate } from './openai.js';
 import { Discord } from './discord.js';
 import { Appwrite } from './appwrite.js';
