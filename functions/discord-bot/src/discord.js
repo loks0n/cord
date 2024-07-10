@@ -12,7 +12,7 @@ export class Discord {
     this.fetch = async (endpoint, options) => {
       const { body, method, headers, ...fetchOptions } = options;
 
-      const response = await fetch(`https://discord.com/api/v9${endpoint}`, {
+      const response = await fetch(`https://discord.com/api/v10${endpoint}`, {
         method: method || 'POST',
         headers: {
           Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
@@ -54,7 +54,10 @@ export class Discord {
     );
   }
 
-  async createInteractionResponse(id, token, response) {
-    await this.fetch(`/interactions/${id}/${token}/callback`, response);
+  async createInteractionResponse(interactionId, token, response) {
+    await this.fetch(
+      `/interactions/${interactionId}/${token}/callback`,
+      response
+    );
   }
 }
