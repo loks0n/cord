@@ -2,7 +2,6 @@ import { InteractionResponseType, InteractionType } from 'discord-interactions';
 
 import { Discord } from './services/discord.js';
 import { commands } from './commands/index.js';
-import { asyncActions } from '../../discord-async/src/main.js';
 
 export default async ({ req, res, log }) => {
   const discord = new Discord();
