@@ -7,7 +7,7 @@ import { ExecutionMethod } from 'node-appwrite';
  * Parse the delay, can be format: 30s, 1m, 1h, 1d, 1h30m, 1d2h30m25s etc
  *
  * @param {string} raw
- * @returns {DateTime}
+ * @returns {Date}
  */
 function parseRawDelay(raw) {
   const matches = raw.match(/(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/);
@@ -18,14 +18,14 @@ function parseRawDelay(raw) {
 
   const [, days, hours, minutes, seconds] = matches;
 
-  const now = DateTime.now();
+  const now = new Date();
 
-  return now.plus({
-    days: days ? parseInt(days, 10) : 0,
-    hours: hours ? parseInt(hours, 10) : 0,
-    minutes: minutes ? parseInt(minutes, 10) : 0,
-    seconds: seconds ? parseInt(seconds, 10) : 0,
-  });
+  now.setSeconds(now.getSeconds() + (seconds ? parseInt(seconds, 10) : 0));
+  now.setMinutes(now.getMinutes() + (minutes ? parseInt(minutes, 10) : 0));
+  now.setHours(now.getHours() + (hours ? parseInt(hours, 10) : 0));
+  now.setDate(now.getDate() + (days ? parseInt(days, 10) : 0));
+
+  return now;
 }
 
 const schedule = new CommandBuilder()
@@ -61,7 +61,7 @@ const schedule = new CommandBuilder()
         {
           'Content-Type': 'application/json',
         },
-        parseRawDelay(data.options[1].value).toISO()
+        parseRawDelay(data.options[1].value).toISOString()
       );
 
       return {
