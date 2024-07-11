@@ -18,7 +18,7 @@ const daily = new CommandBuilder()
 
     // It's too slow to call OpenAI, here - we do it async
     await functions.createExecution(
-      process.env.APPWRITE_FUNCTION_ID,
+      process.env.ASYNC_FUNCTION_ID,
       JSON.stringify({
         userId: member.user.id,
         token,

@@ -49,7 +49,7 @@ const schedule = new CommandBuilder()
 
     try {
       await functions.createExecution(
-        process.env.APPWRITE_FUNCTION_ID,
+        process.env.ASYNC_FUNCTION_ID,
         JSON.stringify({
           userId: member.user.id,
           token,
