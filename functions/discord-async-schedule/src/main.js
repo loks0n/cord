@@ -1,5 +1,4 @@
 import { Discord } from './discord.js';
-import { generateDailyUpdate } from './openai.js';
 
 export default async function ({ req, res, log }) {
   const discord = new Discord();
