@@ -1,7 +1,7 @@
 import { InteractionResponseType } from 'discord-interactions';
-import { Appwrite } from '../appwrite.js';
+import { Appwrite } from '../services/appwrite.js';
 import { CommandBuilder, CommandOptionType, CommandType } from './command.js';
-import { Geo } from '../geo.js';
+import { Geo } from '../services/geo.js';
 
 const location = new CommandBuilder()
   .name('location')

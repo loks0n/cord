@@ -1,5 +1,5 @@
 import { verifyKey } from 'discord-interactions';
-import { throwIfMissing } from './utils.js';
+import { throwIfMissing } from '../utils.js';
 
 export class Discord {
   constructor() {

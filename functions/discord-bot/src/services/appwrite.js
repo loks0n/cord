@@ -1,5 +1,5 @@
 import { Client, Databases, Functions } from 'node-appwrite';
-import { throwIfMissing } from './utils.js';
+import { throwIfMissing } from '../utils.js';
 
 const DATABASE_ID = 'main';
 const USER_SETTINGS_COLLECTION_ID = 'user-settings';

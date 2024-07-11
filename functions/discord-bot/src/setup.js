@@ -1,5 +1,5 @@
 import { commands } from './commands/index.js';
-import { Discord } from './discord.js';
+import { Discord } from './services/discord.js';
 
 async function setup() {
   const discord = new Discord();

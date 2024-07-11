@@ -1,7 +1,6 @@
 import { InteractionResponseType, InteractionType } from 'discord-interactions';
-import { generateDailyUpdate } from './openai.js';
-import { Discord } from './discord.js';
-import { Appwrite } from './appwrite.js';
+import { generateDailyUpdate } from './services/openai.js';
+import { Discord } from './services/discord.js';
 import { commands } from './commands/index.js';
 
 export default async ({ req, res }) => {

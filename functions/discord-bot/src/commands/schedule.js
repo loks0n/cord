@@ -1,5 +1,5 @@
 import { InteractionResponseType } from 'discord-interactions';
-import { Appwrite } from '../appwrite.js';
+import { Appwrite } from '../services/appwrite.js';
 import { CommandBuilder, CommandOptionType, CommandType } from './command.js';
 import { ExecutionMethod } from 'node-appwrite';
 
