@@ -1,11 +1,16 @@
-import { geocoder } from 'node-geocoder';
+import { fetchAdapter, OsmGeocoder } from '@spurreiter/geocoder';
 import tzdata from 'tzdata';
 import countryEmoji from 'country-emoji';
 
 export class Geo {
-  static async getCityFlag(cityName) {
+  constructor() {
+    const adapter = fetchAdapter();
+    this.geocoder = new OsmGeocoder(adapter, { language: 'en', limit: 5 });
+  }
+
+  async getCityFlag(cityName) {
     try {
-      const res = await geocoder.geocode(cityName);
+      const res = await this.geocoder.forward(cityName);
       if (res.length > 0) {
         const countryCode = res[0].countryCode;
         return countryEmoji.flag(countryCode) || '';
@@ -19,7 +24,7 @@ export class Geo {
 
   static async getCityTimezone(cityName) {
     try {
-      const res = await geocoder.geocode(cityName);
+      const res = await this.geocoder.forward(cityName);
       if (res.length > 0) {
         const { latitude, longitude } = res[0];
         const timezone = tzdata.getTimezoneFromCoordinates(latitude, longitude);
