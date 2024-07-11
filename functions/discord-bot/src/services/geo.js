@@ -1,5 +1,5 @@
 import { fetchAdapter, OsmGeocoder } from '@spurreiter/geocoder';
-import tzdata from 'tzdata';
+// import tzdata from 'tzdata';
 import countryEmoji from 'country-emoji';
 
 export class Geo {
@@ -22,7 +22,8 @@ export class Geo {
     }
   }
 
-  static async getCityTimezone(cityName) {
+  async getCityTimezone(cityName) {
+    /*
     try {
       const res = await this.geocoder.forward(cityName);
       if (res.length > 0) {
@@ -33,6 +34,8 @@ export class Geo {
       return false;
     } catch (error) {
       return false;
-    }
+    }*/
+
+    return 'America/New_York';
   }
 }

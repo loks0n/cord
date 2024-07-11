@@ -13,11 +13,13 @@ const location = new CommandBuilder()
     description: 'The city you are located in',
   })
   .action(async ({ member, data }) => {
-    const appwrite = new Appwrite(req.headers['x-appwrite-key']);
-
     const city = data.options[0].value;
-    const timeZone = Geo.getTimezone(location);
-    const flag = Geo.getFlag(location);
+
+    const geo = new Geo();
+    const timeZone = geo.getCityTimezone(city);
+    const flag = geo.getCityFlag(city);
+
+    const appwrite = new Appwrite(req.headers['x-appwrite-key']);
 
     await appwrite.updateSettingsByDiscordUserId(member.user.id, {
       city,
