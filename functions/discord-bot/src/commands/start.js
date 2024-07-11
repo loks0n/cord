@@ -11,7 +11,7 @@ const start = new CommandBuilder()
     name: 'message',
     description: 'Personal message',
   })
-  .action(async ({ member, data }, { req }) => {
+  .action(async ({ member, data }, { req, log }) => {
     const appwrite = new Appwrite(req.headers['x-appwrite-key']);
 
     try {
@@ -38,6 +38,8 @@ const start = new CommandBuilder()
         },
       };
     } catch (error) {
+      log('Error:', error.message);
+
       return {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
