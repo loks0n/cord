@@ -2,11 +2,9 @@ import { InteractionResponseType, InteractionType } from 'discord-interactions';
 
 import { Discord } from './services/discord.js';
 import { commands } from './commands/index.js';
-import { asyncActions } from './async.js';
+import { asyncActions } from '../../discord-async/src/main.js';
 
 export default async ({ req, res, log }) => {
-  if (req.path != '/') return await asyncActions();
-
   const discord = new Discord();
   if (!discord.verifyRequest(req)) {
     return res.json({ error: 'Invalid request signature' }, 401);

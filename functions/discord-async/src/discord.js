@@ -1,15 +1,13 @@
-import { verifyKey } from 'discord-interactions';
-
 export class Discord {
   constructor() {
     this.fetch = async (endpoint, options) => {
       const { body, method, headers, ...fetchOptions } = options;
 
       const response = await fetch(`https://discord.com/api/v10${endpoint}`, {
-        method: method || 'POST',
+        method: method || "POST",
         headers: {
           Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
-          'Content-Type': body ? 'application/json' : undefined,
+          "Content-Type": body ? "application/json" : undefined,
           ...headers,
         },
         body: body ? JSON.stringify(body) : undefined,
@@ -28,26 +26,12 @@ export class Discord {
     };
   }
 
-  verifyRequest(req) {
-    if (
-      !verifyKey(
-        req.bodyRaw,
-        req.headers['x-signature-ed25519'],
-        req.headers['x-signature-timestamp'],
-        process.env.DISCORD_PUBLIC_KEY
-      )
-    ) {
-      return false;
-    }
-
-    return true;
-  }
-
-  async registerCommand(command) {
+  async editOriginalInteractionResponse(token, data) {
     await this.fetch(
-      `/applications/${process.env.DISCORD_APPLICATION_ID}/commands`,
+      `/webhooks/${process.env.DISCORD_APPLICATION_ID}/${token}/messages/@original`,
       {
-        body: command,
+        body: data,
+        method: "PATCH",
       }
     );
   }
