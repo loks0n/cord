@@ -5,6 +5,7 @@ export class Geo {
     const params = new URLSearchParams({
       apiKey: process.env.GEOAPIFY_API_KEY,
       text: cityQuery,
+      format: 'json',
     });
 
     const response = await fetch(
@@ -26,29 +27,27 @@ export class Geo {
       }
     }
 
-    const json = await response.json();
-
-    if (json.features.length < 1) {
-      throw new Error('No location found');
+    const body = await response.json();
+    if (!body.results || body.results.length < 1) {
+      throw new Error('No city found');
     }
 
-    const { properties } = json.features[0];
-    const countryCode = properties['country_code'];
+    const topResult = body.results[0];
 
-    const timeZone = properties.timezone.name;
-    const flag = countryEmoji.flag(countryCode) || '';
+    const timeZone = topResult.timezone.name;
+    const flag = countryEmoji.flag(topResult['country_code']) || '';
     const city =
-      properties.city ||
-      properties.county ||
-      properties.state ||
-      properties.country;
+      topResult.city ||
+      topResult.county ||
+      topResult.state ||
+      topResult.country;
 
     if (city === undefined || !timeZone === undefined) {
       throw new Error(
-        'Failed to find city. Properties: ' +
-          JSON.stringify(properties) +
+        'Failed to find city. Top result: ' +
+          JSON.stringify(topResult) +
           '\n\n full response: ' +
-          JSON.stringify(json)
+          JSON.stringify(body)
       );
     }
 
