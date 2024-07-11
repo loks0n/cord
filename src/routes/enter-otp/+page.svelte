@@ -21,6 +21,7 @@
 		<Layout.Stack>
 			<Input.OTP bind:value={otp} />
 			<Button variant="secondary">Resend code</Button>
+			<Button type="submit">Continue</Button>
 		</Layout.Stack>
 	</Card.Base>
 </form>

@@ -17,23 +17,21 @@
 	<Card.Base>
 		<Layout.Stack>
 			<Option
-				title="Timezone in profile"
-				description="Display your current timezone in your Discord profile"
-			/>
-			<Divider />
-			<Option
-				title="/start command"
+				title="/start and /location command"
 				description="Type /start to notify your teammates that you began your day, displaying your local time."
+				checked={true}
 			/>
 			<Divider />
 			<Option
 				title="/daily command"
 				description="Type /daily and write down your progress. Cord will organize it between different categories automatically."
+				checked={true}
 			/>
 			<Divider />
 			<Option
 				title="/schedule command"
 				description="Type /schedule to write a message and pick a time when it will be sent."
+				checked={true}
 			/>
 			<Button>Apply</Button>
 		</Layout.Stack>
