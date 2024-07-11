@@ -29,13 +29,13 @@ function parseRawDelay(raw) {
 }
 
 const schedule = new CommandBuilder()
-  .name('daily')
+  .name('schedule')
   .type(CommandType.SLASH_COMMAND)
-  .description('Auto format your daily update')
+  .description('Schedule a message')
   .option({
     type: CommandOptionType.STRING,
     name: 'message',
-    description: 'The daily update message',
+    description: 'The message to send',
     required: true,
   })
   .option({
