@@ -1,22 +1,29 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { Button, Card, Input, Layout } from '@appwrite.io/pink';
 	import { IconChevronLeft } from '@appwrite.io/pink-icons';
 
 	let otp = '';
+
+	function onSubmit() {
+		goto('/home');
+	}
 </script>
 
-<Layout.Stack alignItems="center" direction="row">
-	<Button size="small" variant="text">
-		<IconChevronLeft />
-	</Button>
-	<h1>Enter code</h1>
-</Layout.Stack>
-<Card.Base>
-	<Layout.Stack>
-		<Input.OTP bind:value={otp} />
-		<Button variant="secondary">Resend code</Button>
+<form on:submit|preventDefault={onSubmit}>
+	<Layout.Stack alignItems="center" direction="row">
+		<Button size="small" variant="text">
+			<IconChevronLeft />
+		</Button>
+		<h1>Enter code</h1>
 	</Layout.Stack>
-</Card.Base>
+	<Card.Base>
+		<Layout.Stack>
+			<Input.OTP bind:value={otp} />
+			<Button variant="secondary">Resend code</Button>
+		</Layout.Stack>
+	</Card.Base>
+</form>
 
 <style>
 	h1 {
