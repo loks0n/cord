@@ -1,16 +1,10 @@
 import { Client, Databases, Functions } from 'node-appwrite';
-import { throwIfMissing } from '../utils.js';
 
 const DATABASE_ID = 'main';
 const USER_SETTINGS_COLLECTION_ID = 'user-settings';
 
 export class Appwrite {
   constructor(apiKey) {
-    throwIfMissing(process.env, [
-      'APPWRITE_FUNCTION_API_ENDPOINT',
-      'APPWRITE_FUNCTION_PROJECT_ID',
-    ]);
-
     this.client = new Client()
       .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
       .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)

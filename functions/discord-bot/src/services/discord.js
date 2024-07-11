@@ -1,14 +1,7 @@
 import { verifyKey } from 'discord-interactions';
-import { throwIfMissing } from '../utils.js';
 
 export class Discord {
   constructor() {
-    throwIfMissing(process.env, [
-      'DISCORD_APPLICATION_ID',
-      'DISCORD_TOKEN',
-      'DISCORD_PUBLIC_KEY',
-    ]);
-
     this.fetch = async (endpoint, options) => {
       const { body, method, headers, ...fetchOptions } = options;
 
