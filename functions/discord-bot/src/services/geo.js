@@ -26,7 +26,7 @@ export class Geo {
       }
     }
 
-    const json = response.json();
+    const json = await response.json();
 
     if (json.features.length < 1) {
       throw new Error('No location found');
