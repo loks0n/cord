@@ -26,7 +26,7 @@ export default async ({ req, res, log }) => {
 
   log(`Executing ${command.name} command`);
 
-  const response = await command.action(req.body);
+  const response = await command.action(req.body, { req, res });
   log(`Generated response: ${JSON.stringify(response)}`);
 
   return res.json(response, 200);

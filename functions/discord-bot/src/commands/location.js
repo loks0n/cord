@@ -12,7 +12,7 @@ const location = new CommandBuilder()
     name: 'city',
     description: 'The city you are located in',
   })
-  .action(async ({ member, data }) => {
+  .action(async ({ member, data }, { req }) => {
     const city = data.options[0].value;
 
     const geo = new Geo();
