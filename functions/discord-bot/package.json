@@ -14,7 +14,6 @@
     "discord-interactions": "^3.4.0",
     "geo-tz": "^8.0.2",
     "node-appwrite": "^14.0.0-rc.1",
-    "openai": "^4.52.4",
     "undici": "^6.18.1"
   },
   "devDependencies": {
