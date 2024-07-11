@@ -4,7 +4,7 @@ import { Discord } from './services/discord.js';
 import { commands } from './commands/index.js';
 import { asyncActions } from './async.js';
 
-export default async ({ req, res }) => {
+export default async ({ req, res, log }) => {
   if (req.path != '/') return await asyncActions();
 
   const discord = new Discord();
@@ -23,10 +23,14 @@ export default async ({ req, res }) => {
   const command = commands.find(
     (command) => command.name === req.body.data.name
   );
-
   if (!command) {
     return res.json({ error: 'Unknown command' }, 400);
   }
 
-  return res.json(command.action(req.body), 200);
+  log(`Executing ${command.name} command`);
+
+  const response = await command.action(req.body);
+  log(`Generated response: ${JSON.stringify(response)}`);
+
+  return res.json(response, 200);
 };
