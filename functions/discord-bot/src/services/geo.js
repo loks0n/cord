@@ -35,10 +35,27 @@ export class Geo {
     const { properties } = json.features[0];
     const countryCode = properties['country_code'];
 
+    const timeZone = properties.timezone.name;
+    const flag = countryEmoji.flag(countryCode) || '';
+    const city =
+      properties.city ||
+      properties.county ||
+      properties.state ||
+      properties.country;
+
+    if (!city || !timeZone) {
+      throw new Error(
+        'Failed to get location. Properties: ' +
+          JSON.stringify(properties) +
+          '\n\n full response: ' +
+          JSON.stringify(json)
+      );
+    }
+
     return {
-      flag: countryEmoji.flag(countryCode) || '',
+      flag,
+      timeZone,
       city,
-      timeZone: properties.timezone.name,
     };
   }
 }
