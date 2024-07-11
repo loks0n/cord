@@ -12,11 +12,11 @@ export default async ({ req, res }) => {
     return res.json({ error: 'Invalid request signature' }, 401);
   }
 
-  if (type === InteractionType.PING) {
+  if (req.body.type === InteractionType.PING) {
     return res.json({ type: InteractionResponseType.PONG }, 200);
   }
 
-  if (type !== InteractionType.APPLICATION_COMMAND) {
+  if (req.body.type !== InteractionType.APPLICATION_COMMAND) {
     return res.json({ error: 'Invalid interaction type' }, 400);
   }
 
