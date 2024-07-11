@@ -19,6 +19,16 @@ const start = new CommandBuilder()
       const { timeZone, city, flag } =
         await appwrite.getSettingsByDiscordUserId(member.user.id);
 
+      if (!timeZone || !city) {
+        return {
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content:
+              'Please set your location and timezone first with /location',
+          },
+        };
+      }
+
       const timeAtTimeZone = new Date().toLocaleTimeString('en-US', {
         hour: 'numeric',
         minute: 'numeric',

@@ -18,10 +18,6 @@ const location = new CommandBuilder()
 
     const { city, flag, timeZone } = await Geo.forward(cityQuery);
 
-    log('City:', city);
-    log('Flag:', flag);
-    log('Timezone:', timeZone);
-
     try {
       const appwrite = new Appwrite(req.headers['x-appwrite-key']);
       await appwrite.updateSettingsByDiscordUserId(member.user.id, {
@@ -30,10 +26,36 @@ const location = new CommandBuilder()
         flag,
       });
 
+      const startInTimeZone = new Date().toLocaleTimeString('en-US', {
+        hour: 9,
+        minute: 0,
+        second: 0,
+        timeZone,
+      });
+
+      const endInTimeZone = new Date().toLocaleTimeString('en-US', {
+        hour: 17,
+        minute: 0,
+        second: 0,
+        timeZone,
+      });
+
+      const startTimeUnix = new Date(startInTimeZone).getTime() / 1000;
+      const endTimeUnix = new Date(endInTimeZone).getTime() / 1000;
+
+      const content = [
+        `Nice, we've set your location. Feel free to use the snippet below in your profile:`,
+
+        '```',
+        `Current location: ${city} ${flag}`,
+        `Available during <t:${startTimeUnix}:t> to <t:${endTimeUnix}:t>`,
+        '```',
+      ].join('\n');
+
       return {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: `Location, flag and timezone set! ${flag}`,
+          content,
           'allowed-mentions': { parse: ['users'], replied_user: false },
         },
       };
