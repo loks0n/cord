@@ -5,7 +5,7 @@ import { commands } from './commands/index.js';
 import { asyncActions } from './async.js';
 
 export default async ({ req, res }) => {
-  if (req.path != '/') await asyncActions();
+  if (req.path != '/') return await asyncActions();
 
   const discord = new Discord();
   if (!discord.verifyRequest(req)) {

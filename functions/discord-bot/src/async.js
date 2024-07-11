@@ -19,4 +19,6 @@ export async function asyncActions(req, res) {
     });
     return res.json({ success: true }, 200);
   }
+
+  return res.json({ error: 'Invalid path' }, 400);
 }
