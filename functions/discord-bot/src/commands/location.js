@@ -26,19 +26,26 @@ const location = new CommandBuilder()
         flag,
       });
 
-      const startInTimeZone = new Date().toLocaleTimeString('en-US', {
-        hour: 9,
-        minute: 0,
-        second: 0,
-        timeZone,
-      });
+      const now = new Date();
+      const startDate = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        9,
+        0,
+        0
+      );
+      const endDate = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        17,
+        0,
+        0
+      );
 
-      const endInTimeZone = new Date().toLocaleTimeString('en-US', {
-        hour: 17,
-        minute: 0,
-        second: 0,
-        timeZone,
-      });
+      const startInTimeZone = startDate.toLocaleString('en-US', { timeZone });
+      const endInTimeZone = endDate.toLocaleString('en-US', { timeZone });
 
       const startTimeUnix = new Date(startInTimeZone).getTime() / 1000;
       const endTimeUnix = new Date(endInTimeZone).getTime() / 1000;

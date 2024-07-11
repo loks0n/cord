@@ -1,4 +1,4 @@
-import OpenAI from 'openai';
+import OpenAI from 'openai/index.mjs';
 
 export async function generateDailyUpdate(userId, update) {
   const currentDayOfWeek = new Date().toLocaleDateString('en-US', {
