@@ -12,7 +12,7 @@ const start = new CommandBuilder()
     name: 'message',
     description: 'Personal message',
   })
-  .action(async ({ member, data }, { req, log }) => {
+  .action(async ({ member, data }, { req }) => {
     const appwrite = new Appwrite(req.headers['x-appwrite-key']);
 
     try {
@@ -26,8 +26,10 @@ const start = new CommandBuilder()
         timeZone,
       });
 
+      const message = data.options[0] ? data.options[0].value : 'Starting 👋';
+
       const content = [
-        `<@${member.user.id}> ${data.options[0].value || 'Starting 👋'}`,
+        `<@${member.user.id}> ${message}`,
         `:clock1: ${timeAtTimeZone} from ${city} ${flag}`,
       ].join('\n');
 
