@@ -27,15 +27,15 @@ export class Command {
 
 export class CommandBuilder {
   constructor() {
-    this.name = '';
-    this.type = '';
-    this.description = '';
-    this.options = [];
-    this.action = () => {};
+    this._name = '';
+    this._type = '';
+    this._description = '';
+    this._options = [];
+    this._action = () => {};
   }
 
   name(name) {
-    this.name = name;
+    this._name = name;
     return this;
   }
 
@@ -43,7 +43,7 @@ export class CommandBuilder {
    * @param {number} type
    */
   type(type) {
-    this.type = type;
+    this._type = type;
     return this;
   }
 
@@ -51,7 +51,7 @@ export class CommandBuilder {
    * @param {string} description
    */
   description(description) {
-    this.description = description;
+    this._description = description;
     return this;
   }
 
@@ -59,7 +59,7 @@ export class CommandBuilder {
    * @param {object} option
    */
   option(option) {
-    this.options.push(option);
+    this._options.push(option);
     return this;
   }
 
@@ -67,18 +67,17 @@ export class CommandBuilder {
    * @param {Function} action
    */
   action(action) {
-    this.action = action;
+    this._action = action;
     return this;
   }
 
   build() {
     return new Command(
-      this.name,
-      this.type,
-      this.description,
-      this.options,
-      this.action,
-      this.aaction
+      this._name,
+      this._type,
+      this._description,
+      this._options,
+      this._action
     );
   }
 }
