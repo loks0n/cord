@@ -16,7 +16,7 @@ const location = new CommandBuilder()
   .action(async ({ member, data }, { req, log }) => {
     const cityQuery = data.options[0].value;
 
-    const { city, flag, timeZone } = Geo.forward(cityQuery);
+    const { city, flag, timeZone } = await Geo.forward(cityQuery);
 
     log('City:', city);
     log('Flag:', flag);

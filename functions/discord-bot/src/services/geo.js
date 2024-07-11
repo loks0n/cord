@@ -32,21 +32,25 @@ export class Geo {
       throw new Error('No city found');
     }
 
-    const topResult = body.results[0];
+    const result = body.results[0];
 
-    const timeZone = topResult.timezone.name;
-    const flag = countryEmoji.flag(topResult['country_code']) || '';
-    const city =
-      topResult.city ||
-      topResult.county ||
-      topResult.state ||
-      topResult.country;
+    const timeZone = result.timezone.name;
+    const flag = countryEmoji.flag(result['country_code']) || '';
+    const city = result.city || result.county || result.state || result.country;
 
-    throw new Error(
-      'Failed to find city. Top result: ' +
-        JSON.stringify(topResult) +
-        '\n\n full response: ' +
-        JSON.stringify(body)
-    );
+    if (!city || !timeZone) {
+      throw new Error(
+        'Failed to find city. Top result: ' +
+          JSON.stringify(result) +
+          '\n\n full response: ' +
+          JSON.stringify(body)
+      );
+    }
+
+    return {
+      flag,
+      timeZone,
+      city,
+    };
   }
 }
