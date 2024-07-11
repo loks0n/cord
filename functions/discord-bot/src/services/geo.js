@@ -1,10 +1,10 @@
 import countryEmoji from 'country-emoji';
 
 export class Geo {
-  static async forward(location) {
+  static async forward(cityQuery) {
     const params = new URLSearchParams({
       apiKey: process.env.GEOAPIFY_API_KEY,
-      text: location,
+      text: cityQuery,
     });
 
     const response = await fetch(
@@ -43,9 +43,9 @@ export class Geo {
       properties.state ||
       properties.country;
 
-    if (!city || !timeZone) {
+    if (city === undefined || !timeZone === undefined) {
       throw new Error(
-        'Failed to get location. Properties: ' +
+        'Failed to find city. Properties: ' +
           JSON.stringify(properties) +
           '\n\n full response: ' +
           JSON.stringify(json)

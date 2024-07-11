@@ -16,13 +16,13 @@ const location = new CommandBuilder()
   .action(async ({ member, data }, { req, log }) => {
     const cityQuery = data.options[0].value;
 
+    const { city, flag, timeZone } = Geo.forward(cityQuery);
+
+    log('City:', city);
+    log('Flag:', flag);
+    log('Timezone:', timeZone);
+
     try {
-      const { city, flag, timeZone } = Geo.forward(cityQuery);
-
-      log('City:', city);
-      log('Flag:', flag);
-      log('Timezone:', timeZone);
-
       const appwrite = new Appwrite(req.headers['x-appwrite-key']);
       await appwrite.updateSettingsByDiscordUserId(member.user.id, {
         city,
