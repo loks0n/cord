@@ -10,17 +10,13 @@ const location = new CommandBuilder()
   .option({
     type: CommandOptionType.STRING,
     name: 'city',
-    description: 'The city you are located in',
+    description: 'The city you are currently located',
   })
   .action(async ({ member, data }, { req }) => {
-    const city = data.options[0].value;
-
-    const geo = new Geo();
-    const timeZone = geo.getCityTimezone(city);
-    const flag = geo.getCityFlag(city);
+    const cityQuery = data.options[0].value;
+    const { city, flag, timeZone } = Geo.forward(cityQuery);
 
     const appwrite = new Appwrite(req.headers['x-appwrite-key']);
-
     await appwrite.updateSettingsByDiscordUserId(member.user.id, {
       city,
       timeZone,

@@ -1,50 +1,36 @@
-import { find } from 'geo-tz';
 import countryEmoji from 'country-emoji';
 
 export class Geo {
-  async forward(query) {
+  static async forward(location) {
     const params = new URLSearchParams({
-      api_key: process.env.GEOCODIFY_API_KEY,
-      q: query,
+      apiKey: process.env.GEOAPIFY_API_KEY,
+      text: location,
     });
 
     const response = await fetch(
-      `https://api.geocodify.com/v2/geocode?${params.toString()}`,
+      `https://api.geoapify.com/v1/geocode/search?${params.toString()}`,
       {
+        method: 'GET',
         headers: {
           Accept: 'application/json',
         },
       }
     );
 
-    return response.json();
-  }
-
-  async getCityFlag(cityName) {
-    const { response } = await this.forward(cityName);
-    const matches = response.features;
-
-    if (matches.length > 0) {
-      const countryCode = matches[0].properties.country_code;
-      return countryEmoji.flag(countryCode) || '';
+    if (!response.ok) {
+      return {};
     }
 
-    return '';
-  }
+    const json = response.json();
+    const { properties } = json.features[0];
 
-  async getCityTimezone(cityName) {
-    const { response } = await this.forward(cityName);
-    const matches = response.features;
+    const countryCode = properties['country_code'];
 
-    if (matches.length > 0) {
-      const latitude = matches[0].geometry.coordinates[1];
-      const longitude = matches[0].geometry.coordinates[0];
-      const timezone = find(latitude, longitude);
-
-      if (timezone && timezone.length > 0) {
-        return timezone[0];
-      }
-    }
-    return false;
+    return {
+      flag: countryEmoji.flag(countryCode) || '',
+      countryCode,
+      location: city,
+      timeZone: properties.timezone.name,
+    };
   }
 }
