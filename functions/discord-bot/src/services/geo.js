@@ -42,19 +42,11 @@ export class Geo {
       topResult.state ||
       topResult.country;
 
-    if (city === undefined || !timeZone === undefined) {
-      throw new Error(
-        'Failed to find city. Top result: ' +
-          JSON.stringify(topResult) +
-          '\n\n full response: ' +
-          JSON.stringify(body)
-      );
-    }
-
-    return {
-      flag,
-      timeZone,
-      city,
-    };
+    throw new Error(
+      'Failed to find city. Top result: ' +
+        JSON.stringify(topResult) +
+        '\n\n full response: ' +
+        JSON.stringify(body)
+    );
   }
 }
