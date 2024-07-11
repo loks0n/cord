@@ -37,8 +37,7 @@ export class Geo {
 
     return {
       flag: countryEmoji.flag(countryCode) || '',
-      countryCode,
-      location: city,
+      city,
       timeZone: properties.timezone.name,
     };
   }
