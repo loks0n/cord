@@ -26,7 +26,7 @@ const start = new CommandBuilder()
         timeZone,
       });
 
-      const message = data.options[0] ? data.options[0].value : 'Starting 👋';
+      const message = data.options ? data.options[0].value : 'Starting 👋';
 
       const content = [
         `<@${member.user.id}> ${message}`,
