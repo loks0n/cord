@@ -18,12 +18,21 @@ export class Geo {
     );
 
     if (!response.ok) {
-      return {};
+      try {
+        const json = await response.json();
+        throw new Error(json.message);
+      } catch (error) {
+        throw new Error('Failed to get location: ' + response.statusText);
+      }
     }
 
     const json = response.json();
-    const { properties } = json.features[0];
 
+    if (json.features.length < 1) {
+      throw new Error('No location found');
+    }
+
+    const { properties } = json.features[0];
     const countryCode = properties['country_code'];
 
     return {

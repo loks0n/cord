@@ -15,22 +15,31 @@ const location = new CommandBuilder()
   })
   .action(async ({ member, data }, { req }) => {
     const cityQuery = data.options[0].value;
-    const { city, flag, timeZone } = Geo.forward(cityQuery);
 
-    const appwrite = new Appwrite(req.headers['x-appwrite-key']);
-    await appwrite.updateSettingsByDiscordUserId(member.user.id, {
-      city,
-      timeZone,
-      flag,
-    });
+    try {
+      const { city, flag, timeZone } = Geo.forward(cityQuery);
+      const appwrite = new Appwrite(req.headers['x-appwrite-key']);
+      await appwrite.updateSettingsByDiscordUserId(member.user.id, {
+        city,
+        timeZone,
+        flag,
+      });
 
-    return {
-      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-      data: {
-        content: `Location, flag and timezone set! ${flag}`,
-        'allowed-mentions': { parse: ['users'], replied_user: false },
-      },
-    };
+      return {
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: `Location, flag and timezone set! ${flag}`,
+          'allowed-mentions': { parse: ['users'], replied_user: false },
+        },
+      };
+    } catch (error) {
+      return {
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: error.message,
+        },
+      };
+    }
   })
   .build();
 
