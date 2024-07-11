@@ -21,7 +21,11 @@ export class Appwrite {
 
   async getSettingsByDiscordUserId(discordUserId) {
     try {
-      return await this.getSettingsByDiscordUserId(discordUserId);
+      return await this.databases.getDocument(
+        DATABASE_ID,
+        USER_SETTINGS_COLLECTION_ID,
+        discordUserId
+      );
     } catch (error) {
       if (error.code === 404) {
         return false;

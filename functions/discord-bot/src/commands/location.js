@@ -11,6 +11,7 @@ const location = new CommandBuilder()
     type: CommandOptionType.STRING,
     name: 'city',
     description: 'The city you are currently located',
+    required: true,
   })
   .action(async ({ member, data }, { req }) => {
     const cityQuery = data.options[0].value;
