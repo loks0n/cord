@@ -3,31 +3,6 @@ import { Appwrite } from '../services/appwrite.js';
 import { CommandBuilder, CommandOptionType, CommandType } from './command.js';
 import { ExecutionMethod } from 'node-appwrite';
 
-/**
- * Parse the delay, can be format: 30s, 1m, 1h, 1d, 1h30m, 1d2h30m25s etc
- *
- * @param {string} raw
- * @returns {Date}
- */
-function parseRawDelay(raw) {
-  const matches = raw.match(/(?:(\d+)d)?(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/);
-
-  if (!matches) {
-    throw new Error('Invalid delay format, please use: 30s, 1m, 1h, 1d, 1h30m');
-  }
-
-  const [, days, hours, minutes, seconds] = matches;
-
-  const now = new Date();
-
-  now.setSeconds(now.getSeconds() + (seconds ? parseInt(seconds, 10) : 0));
-  now.setMinutes(now.getMinutes() + (minutes ? parseInt(minutes, 10) : 0));
-  now.setHours(now.getHours() + (hours ? parseInt(hours, 10) : 0));
-  now.setDate(now.getDate() + (days ? parseInt(days, 10) : 0));
-
-  return now;
-}
-
 const schedule = new CommandBuilder()
   .name('schedule')
   .type(CommandType.SLASH_COMMAND)
@@ -54,14 +29,14 @@ const schedule = new CommandBuilder()
           userId: member.user.id,
           token,
           message: data.options[0].value,
+          delay: data.options[1].value,
         }),
         true,
         '/schedule',
         ExecutionMethod.POST,
         {
           'Content-Type': 'application/json',
-        },
-        parseRawDelay(data.options[1].value).toISOString()
+        }
       );
 
       return {
