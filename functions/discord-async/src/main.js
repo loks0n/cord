@@ -4,7 +4,7 @@ import { generateDailyUpdate } from './openai.js';
 export default async function ({ req, res, log }) {
   const discord = new Discord();
 
-  log(`Received request: ${JSON.stringify(req || {})}`);
+  log(`Received request: ${JSON.stringify(req)}`);
 
   if (req.path === '/daily') {
     await discord.editOriginalInteractionResponse(req.body.token, {
