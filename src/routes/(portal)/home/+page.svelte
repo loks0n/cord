@@ -13,7 +13,7 @@
 		</a>
 
 		<Button variant="secondary" on:click={() => goto('/settings')}>Settings</Button>
-		<Button variant="text">Sign out</Button>
+		<Button variant="text" on:click={() => goto('/')}>Sign out</Button>
 	</Layout.Stack>
 </Card.Base>
 

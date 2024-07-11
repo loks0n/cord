@@ -2,16 +2,17 @@
 	import { Button, Card, Divider, Layout } from '@appwrite.io/pink';
 	import { IconChevronLeft } from '@appwrite.io/pink-icons';
 	import Option from './option.svelte';
+	import { goto } from '$app/navigation';
 
 	function on_submit() {}
 </script>
 
 <Layout.Stack direction="row">
-	<Button size="small" variant="text">
+	<Button size="small" variant="text" on:click={() => goto('/home')}>
 		<IconChevronLeft />
 	</Button>
 	<h1>Settings</h1>
-	<Button size="small" variant="text">Sign out</Button>
+	<Button size="small" variant="text" on:click={() => goto('/')}>Sign out</Button>
 </Layout.Stack>
 <form on:submit|preventDefault={on_submit}>
 	<Card.Base>
