@@ -3,7 +3,7 @@ import { Appwrite } from '../appwrite.js';
 import { CommandBuilder, CommandOptionType, CommandType } from './command.js';
 import { Geo } from '../geo.js';
 
-const start = new CommandBuilder()
+const location = new CommandBuilder()
   .name('location')
   .type(CommandType.SLASH_COMMAND)
   .description('Set your location for the start command')
@@ -35,4 +35,4 @@ const start = new CommandBuilder()
   })
   .build();
 
-export { start };
+export { location };
