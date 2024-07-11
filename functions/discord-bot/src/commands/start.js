@@ -1,6 +1,7 @@
 import { InteractionResponseType } from 'discord-interactions';
 import { Appwrite } from '../services/appwrite.js';
 import { CommandBuilder, CommandOptionType, CommandType } from './command.js';
+import { AppwriteException } from 'node-appwrite';
 
 const start = new CommandBuilder()
   .name('start')
@@ -15,7 +16,7 @@ const start = new CommandBuilder()
     const appwrite = new Appwrite(req.headers['x-appwrite-key']);
 
     try {
-      const { timeZone, location, flag } =
+      const { timeZone, city, flag } =
         await appwrite.getSettingsByDiscordUserId(member.user.id);
 
       const timeAtTimeZone = new Date().toLocaleTimeString('en-US', {
@@ -27,7 +28,7 @@ const start = new CommandBuilder()
 
       const content = [
         `<@${member.user.id}> ${data.options[0].value || 'Starting 👋'}`,
-        `:clock1: ${timeAtTimeZone} from ${location} ${flag}`,
+        `:clock1: ${timeAtTimeZone} from ${city} ${flag}`,
       ].join('\n');
 
       return {
@@ -38,14 +39,17 @@ const start = new CommandBuilder()
         },
       };
     } catch (error) {
-      log('Error:', JSON.stringify(error));
+      if (error instanceof AppwriteException && error.code === 404) {
+        return {
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content:
+              'Please set your location and timezone first with /location',
+          },
+        };
+      }
 
-      return {
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: 'Please set your location first with /location',
-        },
-      };
+      throw error;
     }
   })
   .build();
