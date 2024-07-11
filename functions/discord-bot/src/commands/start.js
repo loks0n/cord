@@ -11,7 +11,7 @@ const start = new CommandBuilder()
     name: 'message',
     description: 'Personal message',
   })
-  .action(async ({ member, data }) => {
+  .action(async ({ member, data }, { req }) => {
     const appwrite = new Appwrite(req.headers['x-appwrite-key']);
 
     try {

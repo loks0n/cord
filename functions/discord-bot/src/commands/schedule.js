@@ -44,7 +44,7 @@ const schedule = new CommandBuilder()
     description: 'The delay to send the message - e.g. 1h30m',
     required: true,
   })
-  .action(async ({ member, data }) => {
+  .action(async ({ member, data }, { req }) => {
     const { functions } = new Appwrite(req.headers['x-appwrite-key']);
 
     try {

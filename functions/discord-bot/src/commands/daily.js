@@ -13,7 +13,7 @@ const daily = new CommandBuilder()
     description: 'The daily update message',
     required: true,
   })
-  .action(async ({ member, data }) => {
+  .action(async ({ member, data }, { req }) => {
     const { functions } = new Appwrite(req.headers['x-appwrite-key']);
 
     // It's too slow to call OpenAI, here - we do it async
