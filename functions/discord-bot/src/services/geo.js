@@ -22,7 +22,7 @@ export class Geo {
   }
 
   async getCityTimezone(cityName) {
-    return find(40.7128, -74.0060);
+    return find(40.7128, -74.006);
     /*
     try {
       const res = await this.geocoder.forward(cityName);
@@ -37,6 +37,6 @@ export class Geo {
       return false;
     } catch (error) {
       return false;
-    }
-  } */
+    }*/
+  }
 }
