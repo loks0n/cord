@@ -38,7 +38,7 @@ const start = new CommandBuilder()
         },
       };
     } catch (error) {
-      log('Error:', error.message);
+      log('Error:', JSON.stringify(error));
 
       return {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
